@@ -99,96 +99,26 @@ namespace Renamer
             }
         }
 
+        public static Culture getCulture(Culture[] cultures)
+        {
+            return cultures[UnityEngine.Random.Range(0, cultures.Length)];
+        }
+
         public static string getName(ProtoCrewMember c, Culture[] cultures)
         {
             string firstName = "";
             string lastName = "";
 
-            Culture parent = cultures[UnityEngine.Random.Range(0, cultures.Length)];
-            if (c.gender == ProtoCrewMember.Gender.Female)
+            Culture parent = getCulture(cultures);
+
+            string name = parent.RandomName(c.gender);
+
+            if (parent.cultureName.Length > 0)
             {
-                if (parent.fnames1.Length > 0)
-                {
-                    firstName += parent.fnames1[UnityEngine.Random.Range(0, parent.fnames1.Length)];
-                }
-                if (parent.fnames2.Length > 0)
-                {
-                    firstName += parent.fnames2[UnityEngine.Random.Range(0, parent.fnames2.Length)];
-                }
-                if (parent.fnames3.Length > 0)
-                {
-                    firstName += parent.fnames3[UnityEngine.Random.Range(0, parent.fnames3.Length)];
-                }
+                c.flightLog.AddEntryUnique(new FlightLog.Entry(0, KerbalRenamer.Instance.cultureDescriptor, parent.cultureName));
             }
-            else
-            {
-                if (parent.mnames1.Length > 0)
-                {
-                    firstName += parent.mnames1[UnityEngine.Random.Range(0, parent.mnames1.Length)];
-                }
-                if (parent.mnames2.Length > 0)
-                {
-                    firstName += parent.mnames2[UnityEngine.Random.Range(0, parent.mnames2.Length)];
-                }
-                if (parent.mnames3.Length > 0)
-                {
-                    firstName += parent.mnames3[UnityEngine.Random.Range(0, parent.mnames3.Length)];
-                }
-            }
-            if (parent.femaleSurnamesExist && c.gender == ProtoCrewMember.Gender.Female)
-            {
-                if (parent.flnames1.Length > 0)
-                {
-                    lastName += parent.flnames1[UnityEngine.Random.Range(0, parent.flnames1.Length)];
-                }
-                if (parent.flnames2.Length > 0)
-                {
-                    lastName += parent.flnames2[UnityEngine.Random.Range(0, parent.flnames2.Length)];
-                }
-                if (parent.flnames3.Length > 0)
-                {
-                    lastName += parent.flnames3[UnityEngine.Random.Range(0, parent.flnames3.Length)];
-                }
-            }
-            else
-            {
-                if (parent.lnames1.Length > 0)
-                {
-                    lastName += parent.lnames1[UnityEngine.Random.Range(0, parent.lnames1.Length)];
-                }
-                if (parent.lnames2.Length > 0)
-                {
-                    lastName += parent.lnames2[UnityEngine.Random.Range(0, parent.lnames2.Length)];
-                }
-                if (parent.lnames3.Length > 0)
-                {
-                    lastName += parent.lnames3[UnityEngine.Random.Range(0, parent.lnames3.Length)];
-                }
-            }
-            if (lastName.Length > 0)
-            {
-                if (firstName.Length > 0)
-                {
-                    if (parent.cultureName.Length > 0)
-                    {
-                        c.flightLog.AddEntryUnique(new FlightLog.Entry(0, KerbalRenamer.Instance.cultureDescriptor, parent.cultureName));
-                    }
-                    return firstName + " " + lastName;
-                }
-                else
-                {
-                    if (parent.cultureName.Length > 0)
-                    {
-                        c.flightLog.AddEntryUnique(new FlightLog.Entry(0, KerbalRenamer.Instance.cultureDescriptor, parent.cultureName));
-                    }
-                    return lastName;
-                }
-            }
-            else
-            {
-                // 0 length names should be handled elsewhere.
-                return firstName;
-            }
+
+            return name;
         }
 
         public static Culture getCultureByName(string name, Culture[] cultures)
