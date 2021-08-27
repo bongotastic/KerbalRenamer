@@ -9,6 +9,7 @@
    It would be nice to add from cultures not represented in the MatthiasWinkelmann dataset. However, rather than spend lots of time
    trying to get this right, this folder contains the tool for community contribution. 
 '''
+
 class KSPculture:
     def __init__(self, given_name):
         self.name = given_name
@@ -50,6 +51,12 @@ class KSPculture:
             filehandle.write("            key = %s\n"%(name))
         filehandle.write("%s}\n" % (2 * space))
 
+def SanitizeCulture(name):
+    name = name.replace(" ", "_")
+    name = name.replace("/", "_or_")
+    name = name.replace(".", "")
+    return name
+
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
@@ -67,7 +74,8 @@ if __name__ == '__main__':
             if nameline[column] != "":
                 if (int(nameline[column]) <= -5):
                     continue
-                culture = data[0][column]
+                culture = SanitizeCulture(data[0][column])
+
                 if not culture in cultures:
                     cultures[culture] = KSPculture(culture)
 
@@ -115,7 +123,7 @@ if __name__ == '__main__':
                 print("Missing culture: %s" % (line[0]))
 
     ## Clean up
-    del cultures["East Frisia"]
+    del cultures["East_Frisia"]
 
     ## Report
     for culture in cultures:
@@ -133,6 +141,14 @@ if __name__ == '__main__':
     for culture in cultures:
         cultures[culture].Write(fout)
 
+    # Profiles section
+    fout.write("    profile\n    {\n        name = equiprobable\n")
+    for culture in cultures:
+        fout.write("        %s = 1\n"%(culture))
+    fout.write("    }\n")
+
     fout.write("}\n")
     fout.close()
+
+
 
