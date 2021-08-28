@@ -33,6 +33,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Linq;
+using Random = UnityEngine.Random;
 
 namespace Renamer
 {
@@ -101,14 +102,35 @@ namespace Renamer
 
         public static Culture getCulture(Culture[] cultures)
         {
+            Dictionary<string, double> wheel = KerbalRenamer.Instance.cultureWheel;
+            double roll = (double) Random.Range(0f, 1f);
+
+            string lastseen = "";
+            foreach (KeyValuePair<string, double> kvp in wheel)
+            {
+                lastseen = kvp.Key;
+                if (roll <= kvp.Value)
+                {
+                    break;
+                }
+                else
+                {
+                    roll -= kvp.Value;
+                }
+            }
+
+            foreach (Culture culture in cultures)
+            {
+                if (culture.cultureName == lastseen) return culture;
+            }
+            
+            // something went wrong.
+            KSPLog.print("[RENAMER] Something went wrong in culture selection");
             return cultures[UnityEngine.Random.Range(0, cultures.Length)];
         }
 
         public static string getName(ProtoCrewMember c, Culture[] cultures)
         {
-            string firstName = "";
-            string lastName = "";
-
             Culture parent = getCulture(cultures);
 
             string name = parent.RandomName(c.gender);

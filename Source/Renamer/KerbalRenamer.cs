@@ -42,6 +42,10 @@ namespace Renamer
         public static KerbalRenamer rInstance = null;
         public string cultureDescriptor = "Culture";
         internal Culture[] cultures = { };
+        
+        public static string selectedProfile = "NASA";
+        internal Dictionary<string, double> cultureWheel = new Dictionary<string, double>();
+        internal Dictionary<string, double> cultureWeights = new Dictionary<string, double>();
 
         public List<string> originalNames = new List<string> 
         {
@@ -90,6 +94,9 @@ namespace Renamer
                 ctemp.Add(c);
             }
             cultures = ctemp.ToArray();
+            
+            // Load up a default cultureProfile
+            LoadProfile("NASA");
 
             GameEvents.onKerbalAddComplete.Add(new EventData<ProtoCrewMember>.OnEvent(OnKerbalAdded));
             GameEvents.onGameStateCreated.Add(new EventData<Game>.OnEvent(OnGameCreated));
@@ -126,6 +133,59 @@ namespace Renamer
                     var origKerbal = HighLogic.CurrentGame.CrewRoster[originalKerbalName];
                     Randomizer.RerollKerbal(origKerbal, cultures);
                 }
+            }
+        }
+        
+        private void LoadProfile(string profileName)
+        {
+            selectedProfile = profileName;
+            
+            cultureWeights = new Dictionary<string, double>();
+            foreach (Culture culture in cultures)
+            {
+                cultureWeights.Add(culture.cultureName, 1);
+            }
+            
+            foreach (ConfigNode node in GameDatabase.Instance.GetConfigNodes("KERBALRENAMER"))
+            {
+                foreach (ConfigNode profile in node.GetNodes("profile"))
+                {
+                    if (profile.GetValue("name") == profileName)
+                    {
+                        ConfigNode wts = profile.GetNode("weights");
+                        foreach (ConfigNode.Value wtItem in wts.values)
+                        {
+                            if (cultureWeights.ContainsKey(wtItem.name))
+                            {
+                                cultureWeights[wtItem.name] = Double.Parse(wtItem.value);
+                            }
+                            else
+                            {
+                                cultureWeights.Add(wtItem.name, Double.Parse(wtItem.value));
+                            }
+                        }
+                    }
+                }
+            }
+
+            BuildProbabilityVector();
+        }
+
+        public void BuildProbabilityVector()
+        {
+            cultureWheel = new Dictionary<string, double>();
+            
+            double tally = 0;
+
+            foreach (KeyValuePair<string,double> kvp in cultureWeights)
+            {
+                tally += kvp.Value;
+            }
+            
+            foreach (KeyValuePair<string,double> kvp in cultureWeights)
+            {
+                KSPLog.print($"[RENAMER][BUILD] Culture: {kvp.Key}, P={kvp.Value / tally}");
+                cultureWheel.Add(kvp.Key, kvp.Value / tally);
             }
         }
     }
