@@ -96,7 +96,7 @@ namespace Renamer
             cultures = ctemp.ToArray();
             
             // Load up a default cultureProfile
-            LoadProfile("NASA");
+            LoadProfile(RenamerCustomParams.ProfileName);
 
             GameEvents.onKerbalAddComplete.Add(new EventData<ProtoCrewMember>.OnEvent(OnKerbalAdded));
             GameEvents.onGameStateCreated.Add(new EventData<Game>.OnEvent(OnGameCreated));
@@ -108,6 +108,8 @@ namespace Renamer
 
         public void OnKerbalAdded(ProtoCrewMember kerbal)
         {
+            LoadProfile(RenamerCustomParams.ProfileName);
+            
             LogUtils.Log("OnKerbalAdded called for " + kerbal.name);
             if (RenamerCustomParams.PreserveOriginal4Enabled)
             {
@@ -138,26 +140,30 @@ namespace Renamer
         
         private void LoadProfile(string profileName)
         {
+            KSPLog.print($"[RENAMER] Using profile {profileName}");
             selectedProfile = profileName;
+            bool loaded = false;
             
             cultureWeights = new Dictionary<string, double>();
             foreach (Culture culture in cultures)
             {
-                cultureWeights.Add(culture.cultureName, 1);
+                cultureWeights.Add(culture.cultureName, 0);
             }
             
             foreach (ConfigNode node in GameDatabase.Instance.GetConfigNodes("KERBALRENAMER"))
             {
                 foreach (ConfigNode profile in node.GetNodes("profile"))
                 {
+                    KSPLog.print($"Considering profile {profile.GetValue("name")}");
                     if (profile.GetValue("name") == profileName)
                     {
+                        loaded = true;
                         ConfigNode wts = profile.GetNode("weights");
                         foreach (ConfigNode.Value wtItem in wts.values)
                         {
                             if (cultureWeights.ContainsKey(wtItem.name))
                             {
-                                cultureWeights[wtItem.name] = Double.Parse(wtItem.value);
+                                cultureWeights[wtItem.name] += Double.Parse(wtItem.value);
                             }
                             else
                             {
@@ -168,6 +174,13 @@ namespace Renamer
                 }
             }
 
+            // Since we're not validating user input
+            if (!loaded)
+            {
+                LoadProfile("CNSA");
+                return;
+            }
+            
             BuildProbabilityVector();
         }
 

@@ -30,6 +30,28 @@ namespace Renamer
         [GameParameters.CustomParameterUI("Don't Insult Me", toolTip = "Limits stupidity", autoPersistance = true)]
         public bool dontInsultMe = true;
 
+        /*
+        public override string Title { get { return "Cultural profiles"; } }
+        public override GameParameters.GameMode GameMode { get { return GameParameters.GameMode.ANY; } }
+        public override string DisplaySection { get { return "Kerbal Renamer"; } }
+        public override string Section { get { return "Kerbal Renamer"; } }
+        public override int SectionOrder { get { return 2; } }
+        public override bool HasPresets { get { return false; } }
+        */
+        
+        [GameParameters.CustomParameterUI("NASA", toolTip = "Use NASA naming profile", autoPersistance = true)]
+        public bool profileNASA = true;
+        [GameParameters.CustomParameterUI("CCCP", toolTip = "Use CCCP naming profile", autoPersistance = true)]
+        public bool profileCCCP = false;
+        [GameParameters.CustomParameterUI("ESA", toolTip = "Use ESA naming profile", autoPersistance = true)]
+        public bool profileESA = false;
+        [GameParameters.CustomParameterUI("ISRO", toolTip = "Use ISRO naming profile", autoPersistance = true)]
+        public bool profileISRO = false;
+        [GameParameters.CustomParameterUI("CNSA", toolTip = "Use CNSA naming profile", autoPersistance = true)]
+        public bool profileCNSA = false;
+        [GameParameters.CustomParameterUI("CUSTOM", toolTip = "Use CUSTOM naming profile", autoPersistance = true)]
+        public bool profileCUSTOM = false;
+
         public static RenamerCustomParams OptionsInstance
         {
             get
@@ -88,6 +110,20 @@ namespace Renamer
             get
             {
                 return OptionsInstance.dontInsultMe;
+            }
+        }
+
+        public static string ProfileName
+        {
+            get
+            {
+                if (OptionsInstance.profileCCCP) return "CCCP";
+                if (OptionsInstance.profileNASA) return "NASA";
+                if (OptionsInstance.profileESA) return "ESA";
+                if (OptionsInstance.profileISRO) return "ISRO";
+                if (OptionsInstance.profileCNSA) return "CNSA";
+                if (OptionsInstance.profileCUSTOM) return "CUSTOM";
+                return "CUSTOM";
             }
         }
 
