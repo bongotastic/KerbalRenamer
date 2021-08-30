@@ -128,6 +128,8 @@ namespace Renamer
 
         private void RerollOriginals()
         {
+            LoadProfile(RenamerCustomParams.ProfileName);
+            
             foreach (var originalKerbalName in originalNames)
             {
                 if (HighLogic.CurrentGame?.CrewRoster[originalKerbalName] != null)
