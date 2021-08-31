@@ -91,16 +91,15 @@ namespace Renamer
                 }
             }
 
-            string name = getName(kerbal, cultures);
-
-            LogUtils.Log("Renaming to ", name);
-            if (name.Length > 0)
-            {
-                kerbal.ChangeName(name);
-            }
+            Rename(kerbal, cultures);
         }
 
-        public static Culture getCulture(Culture[] cultures)
+        /// <summary>
+        /// Uses the roulette method to pick a culture from a profile.
+        /// </summary>
+        /// <param name="cultures"></param>
+        /// <returns></returns>
+        public static Culture RandomCulture(Culture[] cultures)
         {
             Dictionary<string, double> wheel = KerbalRenamer.Instance.cultureWheel;
             double roll = (double) Random.Range(0f, 1f);
@@ -131,7 +130,7 @@ namespace Renamer
 
         public static string getName(ProtoCrewMember c, Culture[] cultures)
         {
-            Culture parent = getCulture(cultures);
+            Culture parent = RandomCulture(cultures);
 
             string name = parent.RandomName(c.gender);
 
@@ -143,16 +142,30 @@ namespace Renamer
             return name;
         }
 
-        public static Culture getCultureByName(string name, Culture[] cultures)
+        public static void RandomName(ProtoCrewMember.Gender gender, ref string culture, ref string name, Culture[] cultures)
         {
-            for (int i = 0; i < cultures.Length; i++)
+            Culture parent = RandomCulture(cultures);
+            name = parent.RandomName(gender);
+            culture = parent.cultureName;
+        }
+
+        public static void Rename(ProtoCrewMember crewMember, Culture[] cultures)
+        {
+            string newname = "";
+            string newculture = "";
+            RandomName(crewMember.gender, ref newculture, ref newname, cultures);
+
+            if (newculture.Length > 0)
             {
-                if (cultures[i].cultureName == name)
-                {
-                    return cultures[i];
-                }
+                crewMember.flightLog.AddEntryUnique(new FlightLog.Entry(0, KerbalRenamer.Instance.cultureDescriptor,
+                    newculture));
             }
-            return null;
+            
+            LogUtils.Log("Renaming to ", newname);
+            if (newname.Length > 0)
+            {
+                crewMember.ChangeName(newname);
+            }
         }
 
         public static float rollCourage(bool useBellCurveMethod)

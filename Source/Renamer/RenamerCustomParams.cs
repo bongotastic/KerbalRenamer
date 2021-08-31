@@ -123,7 +123,7 @@ namespace Renamer
                 if (OptionsInstance.profileISRO) return "ISRO";
                 if (OptionsInstance.profileCNSA) return "CNSA";
                 if (OptionsInstance.profileCUSTOM) return "CUSTOM";
-                return "CUSTOM";
+                return "1951";
             }
         }
 

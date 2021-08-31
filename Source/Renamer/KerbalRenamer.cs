@@ -41,9 +41,8 @@ namespace Renamer
     {
         public static KerbalRenamer rInstance = null;
         public string cultureDescriptor = "Culture";
-        internal Culture[] cultures = { };
+        public static Culture[] cultures = { };
         
-        public static string selectedProfile = "NASA";
         internal Dictionary<string, double> cultureWheel = new Dictionary<string, double>();
         internal Dictionary<string, double> cultureWeights = new Dictionary<string, double>();
 
@@ -95,22 +94,29 @@ namespace Renamer
             }
             cultures = ctemp.ToArray();
             
-            // Load up a default cultureProfile
-            LoadProfile(RenamerCustomParams.ProfileName);
+            LoadProfile("1951");
 
             GameEvents.onKerbalAddComplete.Add(new EventData<ProtoCrewMember>.OnEvent(OnKerbalAdded));
-            GameEvents.onGameStateCreated.Add(new EventData<Game>.OnEvent(OnGameCreated));
+            //GameEvents.onGameStateCreated.Add(new EventData<Game>.OnEvent(OnGameCreated));
+            //GameEvents.onGameStateLoad.Add(OnGameCreated);
         }
 
-        void OnGameCreated(Game game)
+        public void OnDestroy()
         {
+            GameEvents.onKerbalAddComplete.Remove(OnKerbalAdded);
+            //GameEvents.onGameStateCreated.Remove((OnGameCreated));
+        }
+
+        void OnGameCreated(ConfigNode cfg)
+        {
+            LoadProfile(RenamerCustomParams.ProfileName);
         }
 
         public void OnKerbalAdded(ProtoCrewMember kerbal)
         {
             LoadProfile(RenamerCustomParams.ProfileName);
             
-            LogUtils.Log("OnKerbalAdded called for " + kerbal.name);
+            LogUtils.Log("[RERNAMER][BUILD] OnKerbalAdded called for " + kerbal.name + $" using profile {RenamerCustomParams.ProfileName}");
             if (RenamerCustomParams.PreserveOriginal4Enabled)
             {
                 if (originalNames.Contains(kerbal.name))
@@ -128,6 +134,7 @@ namespace Renamer
 
         private void RerollOriginals()
         {
+            KSPLog.print($"[RENAMER][BUILD] RerollOriginals using profile {RenamerCustomParams.ProfileName}");
             LoadProfile(RenamerCustomParams.ProfileName);
             
             foreach (var originalKerbalName in originalNames)
@@ -143,7 +150,6 @@ namespace Renamer
         private void LoadProfile(string profileName)
         {
             KSPLog.print($"[RENAMER] Using profile {profileName}");
-            selectedProfile = profileName;
             bool loaded = false;
             
             cultureWeights = new Dictionary<string, double>();
@@ -156,7 +162,6 @@ namespace Renamer
             {
                 foreach (ConfigNode profile in node.GetNodes("profile"))
                 {
-                    KSPLog.print($"Considering profile {profile.GetValue("name")}");
                     if (profile.GetValue("name") == profileName)
                     {
                         loaded = true;
@@ -179,7 +184,7 @@ namespace Renamer
             // Since we're not validating user input
             if (!loaded)
             {
-                LoadProfile("CNSA");
+                LoadProfile("CUSTOM");
                 return;
             }
             
@@ -199,9 +204,32 @@ namespace Renamer
             
             foreach (KeyValuePair<string,double> kvp in cultureWeights)
             {
-                KSPLog.print($"[RENAMER][BUILD] Culture: {kvp.Key}, P={kvp.Value / tally}");
+                //KSPLog.print($"[RENAMER][BUILD] Culture: {kvp.Key}, P={kvp.Value / tally}");
                 cultureWheel.Add(kvp.Key, kvp.Value / tally);
             }
         }
+
+        /// <summary>
+        /// API to get a random name NOT associated with a Kerbal.
+        /// </summary>
+        /// <remarks>Useful for Headlines.</remarks>
+        /// <param name="gender"></param>
+        /// <param name="culture"></param>
+        /// <param name="name"></param>
+        public static void RandomName(ProtoCrewMember.Gender gender, ref string culture, ref string name)
+        {
+            Randomizer.RandomName(gender,  ref culture,  ref name, cultures);
+        }
+
+        /// <summary>
+        /// API to rename a crew member (or applicant) to another random name
+        /// </summary>
+        /// <param name="crewMember"></param>
+        public static void Rename(ProtoCrewMember crewMember)
+        {
+            Randomizer.Rename(crewMember, cultures);
+        }
     }
+    
+   
 }
