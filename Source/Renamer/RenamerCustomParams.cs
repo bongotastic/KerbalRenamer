@@ -14,7 +14,7 @@ namespace Renamer
         public override GameParameters.GameMode GameMode { get { return GameParameters.GameMode.ANY; } }
         public override string DisplaySection { get { return "Kerbal Renamer"; } }
         public override string Section { get { return "Kerbal Renamer"; } }
-        public override int SectionOrder { get { return 1; } }
+        public override int SectionOrder { get { return 0; } }
         public override bool HasPresets { get { return false; } }
 
         [GameParameters.CustomParameterUI("Preserve Original 4", toolTip = "Keep Jeb, Bill, Bob and Val?", autoPersistance = true)]
@@ -33,9 +33,9 @@ namespace Renamer
         /*
         public override string Title { get { return "Cultural profiles"; } }
         public override GameParameters.GameMode GameMode { get { return GameParameters.GameMode.ANY; } }
-        public override string DisplaySection { get { return "Kerbal Renamer"; } }
-        public override string Section { get { return "Kerbal Renamer"; } }
-        public override int SectionOrder { get { return 2; } }
+        public override string DisplaySection { get { return "Cultural profiles"; } }
+        public override string Section { get { return "Cultural profiles"; } }
+        public override int SectionOrder { get { return 1; } }
         public override bool HasPresets { get { return false; } }
         */
         
