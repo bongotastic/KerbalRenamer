@@ -128,20 +128,6 @@ namespace Renamer
             return cultures[UnityEngine.Random.Range(0, cultures.Length)];
         }
 
-        public static string getName(ProtoCrewMember c, Culture[] cultures)
-        {
-            Culture parent = RandomCulture(cultures);
-
-            string name = parent.RandomName(c.gender);
-
-            if (parent.cultureName.Length > 0)
-            {
-                c.flightLog.AddEntryUnique(new FlightLog.Entry(0, KerbalRenamer.Instance.cultureDescriptor, parent.cultureName));
-            }
-
-            return name;
-        }
-
         public static void RandomName(ProtoCrewMember.Gender gender, ref string culture, ref string name, Culture[] cultures)
         {
             Culture parent = RandomCulture(cultures);

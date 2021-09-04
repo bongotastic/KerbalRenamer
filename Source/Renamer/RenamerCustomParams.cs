@@ -14,7 +14,7 @@ namespace Renamer
         public override GameParameters.GameMode GameMode { get { return GameParameters.GameMode.ANY; } }
         public override string DisplaySection { get { return "Kerbal Renamer"; } }
         public override string Section { get { return "Kerbal Renamer"; } }
-        public override int SectionOrder { get { return 0; } }
+        public override int SectionOrder { get { return 1; } }
         public override bool HasPresets { get { return false; } }
 
         [GameParameters.CustomParameterUI("Preserve Original 4", toolTip = "Keep Jeb, Bill, Bob and Val?", autoPersistance = true)]
@@ -31,16 +31,19 @@ namespace Renamer
         public bool dontInsultMe = true;
 
         /*
+        // todo Separate cultural profile selection to a second section 
         public override string Title { get { return "Cultural profiles"; } }
         public override GameParameters.GameMode GameMode { get { return GameParameters.GameMode.ANY; } }
         public override string DisplaySection { get { return "Cultural profiles"; } }
         public override string Section { get { return "Cultural profiles"; } }
-        public override int SectionOrder { get { return 1; } }
+        public override int SectionOrder { get { return 2; } }
         public override bool HasPresets { get { return false; } }
         */
         
+        [GameParameters.CustomParameterUI("1951", toolTip = "Rocket-science nations in 1951", autoPersistance = true)]
+        public bool profile1951 = true;
         [GameParameters.CustomParameterUI("NASA", toolTip = "Use NASA naming profile", autoPersistance = true)]
-        public bool profileNASA = true;
+        public bool profileNASA = false;
         [GameParameters.CustomParameterUI("CCCP", toolTip = "Use CCCP naming profile", autoPersistance = true)]
         public bool profileCCCP = false;
         [GameParameters.CustomParameterUI("ESA", toolTip = "Use ESA naming profile", autoPersistance = true)]
@@ -117,6 +120,7 @@ namespace Renamer
         {
             get
             {
+                if (OptionsInstance.profile1951) return "1951";
                 if (OptionsInstance.profileCCCP) return "CCCP";
                 if (OptionsInstance.profileNASA) return "NASA";
                 if (OptionsInstance.profileESA) return "ESA";

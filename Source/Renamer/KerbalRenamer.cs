@@ -107,6 +107,11 @@ namespace Renamer
             //GameEvents.onGameStateCreated.Remove((OnGameCreated));
         }
 
+        /// <summary>
+        /// Attempts to load profile ASAP.
+        /// </summary>
+        /// <remarks>No used as it doesn't work, hence the 1951 hack.</remarks>
+        /// <param name="cfg"></param>
         void OnGameCreated(ConfigNode cfg)
         {
             LoadProfile(RenamerCustomParams.ProfileName);
@@ -124,7 +129,7 @@ namespace Renamer
                     return;
                 }
             }
-            else // see if any of the originals are still around
+            else
             {
                 RerollOriginals();
             }
@@ -132,6 +137,10 @@ namespace Renamer
             Randomizer.RerollKerbal(kerbal, cultures);
         }
 
+        /// <summary>
+        /// Process the starting 4.
+        /// </summary>
+        /// <remarks>Is fired really early, in fact so early that KSP log states that the kerbal don't exist yet.</remarks>
         private void RerollOriginals()
         {
             KSPLog.print($"[RENAMER][BUILD] RerollOriginals using profile {RenamerCustomParams.ProfileName}");
@@ -147,6 +156,10 @@ namespace Renamer
             }
         }
         
+        /// <summary>
+        /// Loads a profile node from KERBALRENAMER
+        /// </summary>
+        /// <param name="profileName">must match a node with given name attribute</param>
         private void LoadProfile(string profileName)
         {
             KSPLog.print($"[RENAMER] Using profile {profileName}");
@@ -191,6 +204,9 @@ namespace Renamer
             BuildProbabilityVector();
         }
 
+        /// <summary>
+        /// converts weights from the config node to probabilities.
+        /// </summary>
         public void BuildProbabilityVector()
         {
             cultureWheel = new Dictionary<string, double>();
