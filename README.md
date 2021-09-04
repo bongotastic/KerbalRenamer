@@ -10,7 +10,7 @@ Select ONE profile from the Settings section for Kerbal Renamer. Whilst it is po
 It is possible to define your own mixture of culture by editing the weights in the `CUSTOM` profile, then selecting this profile in the relevant Settings section. 
 
 # Adding cultures
-You are welcome to add cultures to `kerbalrenamer.cfg` by copying another culture, and editing the FFIRSTNAME1, MFIRSTNAME1, LASTNAME1, optionally FLASTNAME1 (last name for women). Such edits can be shared with the community through a Pull request. If the culture places surnames before first names, use the config node value `pattern = LF` as with `China` `and Hungary`.
+You are welcome to add cultures to `kerbalrenamer.cfg` by copying another culture, and editing the FFIRSTNAME1, MFIRSTNAME1, LASTNAME1, optionally FLASTNAME1 (last name for women). Such edits can be shared with the community through a Pull request. If the culture places surnames before first names, use the config node value `pattern = LF` as with `China` and `Hungary`.
 
 # Representation
 The cultural coverage in `kerbalrenamer.cfg` is derived from frequency dataset and largely covers Northern hemisphere nationality. The nations relevant to the 1951+ space race are covered. There are also many nations that are not particularly relevant. This being said, there are many missing nations. The choice to include/exclude was pragmatic and based on available data. It certainly is not a thorough enthographic study. 
