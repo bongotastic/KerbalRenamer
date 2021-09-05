@@ -12,6 +12,7 @@ namespace Renamer
 {
     public class Culture
     {
+        public bool reversePattern = false;
         public bool femaleSurnamesExist = false;
         public string cultureName = "";
         public string[] fnames1 = { };
@@ -35,6 +36,15 @@ namespace Renamer
                 cultureName = node.GetValue("name");
             }
 
+            if (node.HasValue("pattern"))
+            {
+                reversePattern = node.GetValue("pattern") == "LF";
+            }
+            else
+            {
+                reversePattern = false;
+            }
+            
             foreach (ConfigNode childNode in node.nodes)
             {
                 vals = childNode.GetValues("key");
@@ -100,14 +110,28 @@ namespace Renamer
         {
             string firstName = RandomFirstname(gender);
             string lastName = RandomLastName(gender);
-            
-            if (firstName!= "" & lastName != "")
+
+            if (!reversePattern)
             {
-                return firstName + " " + lastName;
+                if (firstName!= "" & lastName != "")
+                {
+                    return firstName + " " + lastName;
+                }
+                else
+                {
+                    return firstName + lastName;
+                }
             }
             else
             {
-                return firstName + lastName;
+                if (firstName!= "" & lastName != "")
+                {
+                    return lastName + " " + firstName;
+                }
+                else
+                {
+                    return lastName + firstName;
+                }
             }
         }
 

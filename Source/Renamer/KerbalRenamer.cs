@@ -42,7 +42,7 @@ namespace Renamer
         public static KerbalRenamer rInstance = null;
         public string cultureDescriptor = "Culture";
         public static Culture[] cultures = { };
-        
+
         internal Dictionary<string, double> cultureWheel = new Dictionary<string, double>();
         internal Dictionary<string, double> cultureWeights = new Dictionary<string, double>();
 
@@ -177,6 +177,7 @@ namespace Renamer
                 {
                     if (profile.GetValue("name") == profileName)
                     {
+                        
                         loaded = true;
                         ConfigNode wts = profile.GetNode("weights");
                         foreach (ConfigNode.Value wtItem in wts.values)
