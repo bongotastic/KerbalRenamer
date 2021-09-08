@@ -130,10 +130,5 @@ namespace Renamer
                 return "1951";
             }
         }
-
-        public override void SetDifficultyPreset(GameParameters.Preset preset)
-        {
-            base.SetDifficultyPreset(preset);
-        }
     }
 }

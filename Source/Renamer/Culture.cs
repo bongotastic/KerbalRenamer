@@ -31,20 +31,9 @@ namespace Renamer
         public Culture(ConfigNode node)
         {
             string[] vals;
-            if (node.HasValue("name"))
-            {
-                cultureName = node.GetValue("name");
-            }
+            cultureName = node.HasValue("name") ? node.GetValue("name") : "";
+            reversePattern = node.HasValue("pattern") && (node.GetValue("pattern") == "LF");
 
-            if (node.HasValue("pattern"))
-            {
-                reversePattern = node.GetValue("pattern") == "LF";
-            }
-            else
-            {
-                reversePattern = false;
-            }
-            
             foreach (ConfigNode childNode in node.nodes)
             {
                 vals = childNode.GetValues("key");
@@ -101,15 +90,15 @@ namespace Renamer
         }
 
         /// <summary>
-        /// Create a full name for a given gender.
+        /// Create a full name for a given gender within this culture. For the API, use the calls in the
+        /// kerbalRenamer class. 
         /// </summary>
-        /// <remarks>Add culture's grammar for name generation to handle Chinese, Hungarian names.</remarks>
         /// <param name="gender"></param>
         /// <returns></returns>
-        public string RandomName(ProtoCrewMember.Gender gender)
+        public string GenerateRandomName(ProtoCrewMember.Gender gender)
         {
-            string firstName = RandomFirstname(gender);
-            string lastName = RandomLastName(gender);
+            string firstName = GenerateRandomFirstname(gender);
+            string lastName = GenerateRandomLastName(gender);
 
             if (!reversePattern)
             {
@@ -135,7 +124,7 @@ namespace Renamer
             }
         }
 
-        public string RandomFirstname(ProtoCrewMember.Gender gender)
+        public string GenerateRandomFirstname(ProtoCrewMember.Gender gender)
         {
             string firstName = "";
             
@@ -172,7 +161,7 @@ namespace Renamer
             return firstName;
         }
 
-        public string RandomLastName(ProtoCrewMember.Gender gender)
+        public string GenerateRandomLastName(ProtoCrewMember.Gender gender)
         {
             string lastName = "";
             if (femaleSurnamesExist && gender == ProtoCrewMember.Gender.Female)

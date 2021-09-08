@@ -78,5 +78,18 @@
     <Compile Include="KerbalRenamer.cs" />
     <Compile Include="RenamerCustomParams.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\GameData\KerbalRenamer\KerbalRenamer.cfg">
+      <Link>GameData\KerbalRenamer\KerbalRenamer.cfg</Link>
+    </Content>
+    <Content Include="..\..\GameData\KerbalRenamer\KerbalRenamer.version">
+      <Link>GameData\KerbalRenamer\KerbalRenamer.version</Link>
+    </Content>
+    <Content Include="..\..\GameData\KerbalRenamer\plugins\Renamer.dll">
+      <Link>GameData\KerbalRenamer\plugins\Renamer.dll</Link>
+    </Content>
+    <Content Include="buildmod.py" />
+    <Content Include="sourcedata\surname.world.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

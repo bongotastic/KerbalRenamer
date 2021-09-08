@@ -91,7 +91,7 @@ namespace Renamer
                 }
             }
 
-            Rename(kerbal, cultures);
+            RenameProtoCrewMember(kerbal, cultures);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace Renamer
         /// </summary>
         /// <param name="cultures"></param>
         /// <returns></returns>
-        public static Culture RandomCulture(Culture[] cultures)
+        public static Culture SelectRandomCulture(Culture[] cultures)
         {
             Dictionary<string, double> wheel = KerbalRenamer.Instance.cultureWheel;
             double roll = (double) Random.Range(0f, 1f);
@@ -128,18 +128,18 @@ namespace Renamer
             return cultures[UnityEngine.Random.Range(0, cultures.Length)];
         }
 
-        public static void RandomName(ProtoCrewMember.Gender gender, ref string culture, ref string name, Culture[] cultures)
+        public static void GenerateRandomName(ProtoCrewMember.Gender gender, ref string culture, ref string name, Culture[] cultures)
         {
-            Culture parent = RandomCulture(cultures);
-            name = parent.RandomName(gender);
+            Culture parent = SelectRandomCulture(cultures);
+            name = parent.GenerateRandomName(gender);
             culture = parent.cultureName;
         }
 
-        public static void Rename(ProtoCrewMember crewMember, Culture[] cultures)
+        public static void RenameProtoCrewMember(ProtoCrewMember crewMember, Culture[] cultures)
         {
             string newname = "";
             string newculture = "";
-            RandomName(crewMember.gender, ref newculture, ref newname, cultures);
+            GenerateRandomName(crewMember.gender, ref newculture, ref newname, cultures);
 
             if (newculture.Length > 0)
             {
