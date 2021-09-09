@@ -97,7 +97,7 @@ namespace Renamer
         /// <returns></returns>
         public string GenerateRandomName(ProtoCrewMember.Gender gender)
         {
-            string firstName = GenerateRandomFirstname(gender);
+            string firstName = GenerateRandomFirstName(gender);
             string lastName = GenerateRandomLastName(gender);
 
             if (!reversePattern)
@@ -124,7 +124,7 @@ namespace Renamer
             }
         }
 
-        public string GenerateRandomFirstname(ProtoCrewMember.Gender gender)
+        public string GenerateRandomFirstName(ProtoCrewMember.Gender gender)
         {
             string firstName = "";
             

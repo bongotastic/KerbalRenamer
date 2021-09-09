@@ -42,13 +42,13 @@ namespace Renamer
         public static KerbalRenamer rInstance = null;
         public string cultureDescriptor = "Culture";
         
-        // Holds the cultures (as instances) loaded from the KERBALRENAMER node(s)
+        /// Holds the cultures (as instances) loaded from the KERBALRENAMER node(s)
         public static Culture[] cultures = { };
 
-        // Dictionary mapping cultures (by name) with probabilities
+        /// Dictionary mapping cultures (by name) with probabilities
         internal Dictionary<string, double> cultureWheel = new Dictionary<string, double>();
         
-        // Dictionary mapping cultures (by name) with their weights specified in a cfg node
+        /// Dictionary mapping cultures (by name) with their weights specified in a cfg node
         internal Dictionary<string, double> cultureWeights = new Dictionary<string, double>();
 
         public List<string> originalNames = new List<string>
@@ -141,8 +141,7 @@ namespace Renamer
         {
             LoadProfile(RenamerCustomParams.ProfileName);
 
-            LogUtils.Log("[RENAMER][BUILD] OnKerbalAdded called for " + kerbal.name +
-                         $" using profile {RenamerCustomParams.ProfileName}");
+            KSPLog.print($"OnKerbalAdded called for {kerbal.name} using profile {RenamerCustomParams.ProfileName}");
             if (RenamerCustomParams.PreserveOriginal4Enabled)
             {
                 if (originalNames.Contains(kerbal.name))
