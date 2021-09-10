@@ -189,7 +189,7 @@ namespace Renamer
         /// <param name="profileName">must match a node with given name attribute</param>
         private void LoadProfile(string profileName)
         {
-            LogUtils.Log($"[RENAMER] Using profile {profileName}");
+            LogUtils.Log($"Using profile {profileName}");
             bool loaded = false;
 
             cultureWeights = new Dictionary<string, double>();
