@@ -124,7 +124,7 @@ namespace Renamer
             }
             
             // something went wrong.
-            KSPLog.print("[RENAMER] Something went wrong in culture selection");
+            LogUtils.Log("Something went wrong in culture selection");
             return cultures[UnityEngine.Random.Range(0, cultures.Length)];
         }
 

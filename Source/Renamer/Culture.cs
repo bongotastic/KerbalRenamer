@@ -12,8 +12,20 @@ namespace Renamer
 {
     public class Culture
     {
+        /// <summary>
+        /// Whether a culture places last name ahead of first.
+        /// </summary>
         public bool reversePattern = false;
+        
+        /// <summary>
+        /// Whether a culture uses a different family name for female names
+        /// </summary>
         public bool femaleSurnamesExist = false;
+        
+        /// <summary>
+        /// Identifier of the culture as defined in config files
+        /// </summary>
+        
         public string cultureName = "";
         public string[] fnames1 = { };
         public string[] fnames2 = { };
